@@ -28,6 +28,7 @@ class _PayCalculatorState extends State<PayCalculator> {
 
   String regularPay = '';
   String overtimePay = '';
+  String totalPay = '';
   String tax = '';
   String error_message = '';
 
@@ -40,15 +41,17 @@ class _PayCalculatorState extends State<PayCalculator> {
 
     if (hoursWorked < 0 ||
         hourlyRate < 0 ||
-        hoursWorked > 140 || // we assume that it is impossible to work more than 20 hours a day. Hence, the maximum number of hours per week is 140
-        hourlyRate > 200000) // hourly rate of elon musk is just $192307, so we reject hourly rate of >$200000
+        hoursWorked >
+            140 || // we assume that it is impossible to work more than 20 hours a day. Hence, the maximum number of hours per week is 140
+        hourlyRate >
+            200000) // hourly rate of elon musk is just $192307, so we reject hourly rate of >$200000
     {
       error_message = "Invalid input";
-    }
-    else if (hoursWorked <= 40) {
+    } else if (hoursWorked <= 40) {
       regular = hourlyRate * hoursWorked;
       regularPay = (regular).toStringAsFixed(2);
       overtimePay = '0.00';
+      totalPay = (regular).toStringAsFixed(2);
       tax = (regular * 0.18).toStringAsFixed(2);
       error_message = "";
     } else {
@@ -56,6 +59,7 @@ class _PayCalculatorState extends State<PayCalculator> {
       overtime = hourlyRate * (hoursWorked - 40) * 1.5;
       regularPay = regular.toStringAsFixed(2);
       overtimePay = overtime.toStringAsFixed(2);
+      totalPay = (regular + overtime).toStringAsFixed(2);
       tax = ((regular + overtime) * 0.18).toStringAsFixed(2);
       error_message = "";
     }
@@ -100,6 +104,13 @@ class _PayCalculatorState extends State<PayCalculator> {
             ),
             Text(
               'Overtime Pay: \$${overtimePay}',
+              style: TextStyle(
+                color: Colors.brown, // Set the text color to brown
+                fontSize: 20, // Optional: set the font size
+              ),
+            ),
+            Text(
+              'Total Pay (before tax): \$${totalPay}',
               style: TextStyle(
                 color: Colors.brown, // Set the text color to brown
                 fontSize: 20, // Optional: set the font size
